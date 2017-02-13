@@ -38,6 +38,7 @@ namespace AssemblyCSharp
 		public void Set(int i, int j, int k, Voxel v) {
 			var origin = GetOrigin (i, j, k);
 			var key = origin [0] + "," + origin [1] + "," + origin [2];
+			v.coord = new Vector3i (i, j, k);
 
 			if (!chunks.ContainsKey (key)) {
 				chunks [key] = new Chunk (size_i);

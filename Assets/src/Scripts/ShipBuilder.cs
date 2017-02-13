@@ -12,8 +12,16 @@ public class ShipBuilder : MonoBehaviour
 	}
 
 	void Update() {
-		if (Ship.playerShip != null) {
+		var ship = Ship.playerShip;
+		if (ship != null) {
 			cursor.SetValid (getCoordValid ());
+
+			if (Input.GetKeyDown (KeyCode.Mouse0)) {
+				var v = new Voxel ();
+				var coord = cursor.coord;
+				ship.chunks.Set(coord.x, coord.y, coord.z, v);
+				Game.Instance.Save ();
+			}
 		}
 	}
 

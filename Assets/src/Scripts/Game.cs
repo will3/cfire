@@ -5,6 +5,17 @@ using System.Runtime.Serialization.Formatters.Binary;
 using AssemblyCSharp;
 
 public class Game : MonoBehaviour {
+	private static Game instance;
+	public static Game Instance {
+		get {
+			return instance;
+		}
+	}
+
+	private Game() {
+		instance = this;
+	}
+
 	private GameState gameState = new GameState();
 
 	void Start() {
@@ -35,6 +46,17 @@ public class Game : MonoBehaviour {
 		ship.Load (gameState.shipData);
 
 		Ship.playerShip = ship;
+	}
+
+	public void Save() {
+		gameState.shipData = Ship.playerShip.chunks.Save ();
+
+		var savePath = Application.persistentDataPath + "/save";
+		var formatter = new BinaryFormatter ();
+	
+		var stream = File.Create (savePath);
+		formatter.Serialize (stream, gameState);
+		stream.Close ();
 	}
 
 	void Update() {
