@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Cubiquity;
 
 namespace AssemblyCSharp
 {
 	public class Chunks : MonoBehaviour
 	{
+		public readonly Dictionary<string, Chunk> chunks = new Dictionary<string, Chunk>();
+
 		private float size = 16.0f;
 		private int size_i = 16;
-		public readonly Dictionary<string, Chunk> chunks = new Dictionary<string, Chunk>();
 
 		public Material material;
 		public Material transparentMaterial;
 
-		public int tileRows = 8;
-		public int tilePixelSize = 8;
+		public int tileRows = 16;
+		public int tilePixelSize = 16;
 
 		public bool hasCollider = true;
 
@@ -98,6 +100,40 @@ namespace AssemblyCSharp
 			if (hasCollider) {
 				chunkObject.obj.GetComponent<MeshCollider> ().sharedMesh = m;
 			}
+		}
+
+		public void Load(ChunkData data) {
+			this.size = data.size;
+			this.size_i = data.size;
+
+			// TODO handle memory leak
+			chunks.Clear ();
+
+			foreach (var coord in data.data.Keys) {
+				var v = data.data [coord];
+				Set (coord.x, coord.y, coord.z, v);
+			}
+		}
+
+		public ChunkData Save() {
+			var chunkData = new ChunkData ();
+			chunkData.size = this.size_i;
+
+			foreach (var chunk in chunks.Values) {
+				for (var i = 0; i < size; i++) {
+					for (var j = 0; j < size; j++) {
+						for (var k = 0; k < size; k++) {
+							var v = chunk.Get (i, j, k);		
+							if (v != null) {
+								var coord = new Vector3i (i + chunk.origin [0], j + chunk.origin [1], k + chunk.origin [2]);
+								chunkData.data [coord] = v;
+							}
+						}
+					}
+				}
+			}
+
+			return chunkData;
 		}
 	}
 }

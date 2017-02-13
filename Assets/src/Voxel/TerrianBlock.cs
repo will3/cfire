@@ -99,7 +99,7 @@ namespace AssemblyCSharp
 			voxel.coord = coord;
 			voxel.textureIds = GetTextureIds ();
 			voxel.transparent = transparent;
-			voxel.isWater = type == TerrianBlockType.Water;
+
 			if (mainGravity.HasValue) {
 				voxel.up = DirUtils.GetIdentifier (mainGravity.Value);
 			}

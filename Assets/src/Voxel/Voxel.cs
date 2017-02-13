@@ -5,15 +5,13 @@ using Cubiquity;
 
 namespace AssemblyCSharp
 {
+	[Serializable]
 	public class Voxel
 	{
 		public Vector3i coord;
 		public int[] textureIds; // Left, right, down, top, back forward
 		public bool transparent;
-		public bool isWater;
-
-		// Up direction
-		public int up;
+		public int up; // Up direction
 	}
 }
 
